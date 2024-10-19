@@ -18,7 +18,7 @@ class Cliente(models.Model):
     data_cadastro = models.DateTimeField(auto_now_add=True, verbose_name='Data de Cadastro')
 
     def __str__(self):
-        return "{} - ({}) - {}".format(self.nome, self.telefone, self.endereco)
+        return "{}".format(self.nome)
 
 
 # Produto base

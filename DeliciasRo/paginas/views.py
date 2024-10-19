@@ -13,6 +13,8 @@ class IndexView(TemplateView):
         context['titulo'] = 'Página inicial'
         context['pedidos'] = Pedido.objects.all().count()
         
+        context['pedidos_pendentes'] = Pedido.objects.filter(status='Pendente')
+        
         return context
     
 class SobreView(TemplateView):
