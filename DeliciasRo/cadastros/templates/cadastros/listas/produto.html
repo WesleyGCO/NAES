@@ -1,0 +1,43 @@
+{% extends "paginas/modelo.html" %}
+
+{% load static %}
+
+{% block conteudo %}
+
+<h3>Lista de produtos</h3>
+
+<a href="{% url 'cadastrar-produto' %}" class="btn btn-primary btn-sm">Adicionar novo pedido</a>
+
+<hr>
+<div class="table-responsive">
+    <table class="table table-striped">
+        <tr>
+            <th>Nome</th>
+            <th>Categoria</th>
+            <th>Preço</th>
+            <th>Opções</th>
+        </tr>
+
+        {% for object in object_list %}
+
+        <tr>
+            <td>{{ object.nome }}</td>
+            <td>{{ object.categoria.nome }}</td>
+            <td>{{ object.preco }}</td>
+            <td>
+                <a href="{% url 'atualizar-produto' object.id %}" class="btn btn-warning btn-sm">Editar</a>
+                <a href="{% url 'excluir-produto' object.id %}" class="btn btn-danger btn-sm">Excluir</a>
+            </td>
+        </tr>
+
+        {% empty %}
+        <tr>
+            <td colspan="3">Nenhum registro encontrado</td>
+        </tr>
+
+        {% endfor %}
+    </table>
+</div>
+
+
+{% endblock %}

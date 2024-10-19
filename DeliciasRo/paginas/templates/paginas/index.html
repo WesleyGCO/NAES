@@ -1,0 +1,32 @@
+{% extends "paginas/modelo.html" %}
+
+{% load static %}
+
+{% block conteudo %}
+
+<h3>Bem Vindos ao sistema</h3>
+
+{% if not request.user.is_authenticated %}
+    <p>
+        Para acessar o sistema, faça o login.
+    </p>
+    <p>
+        <a href="{% url 'login' %}" class="btn btn-success">Login</a>
+    </p>
+
+{% else %}
+
+    <p>
+        Olá, {{ request.user }}!
+    </p>
+
+    <h4>Minhas estatísticas</h4>
+    <ul>
+        <li>Total de pedidos: {{ pedidos }}</li>
+    </ul>
+
+    <hr>
+
+{% endif %}
+
+{% endblock %}

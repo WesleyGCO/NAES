@@ -1,0 +1,41 @@
+{% extends "paginas/modelo.html" %}
+
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block conteudo %}
+
+<h3>{{ titulo }}</h3>
+
+<p class="lead">
+    Preencha todos os campos obrigatórios
+</p>
+
+<hr>
+
+<form action="" method="POST">
+    {% csrf_token %}
+
+    <!-- Renderiza o formulário principal -->
+    {{ form|crispy }}
+
+    <!-- Verifica se existe um Formset no contexto e o renderiza -->
+    {% if formset %}
+    <h5>Produtos do Pedido</h5>
+    {{ formset.management_form }}
+    <div id="formset-area">
+        {% for form in formset %}
+        <div class="formset-row">
+            {{ form|crispy }}
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Botão para adicionar mais produtos (se necessário) -->
+    <button type="button" class="btn btn-success" id="add-formset">Adicionar Produto</button>
+    {% endif %}
+
+    <button type="submit" class="btn btn-primary mt-3">{{ botao }}</button>
+</form>
+
+{% endblock %}
