@@ -15,27 +15,65 @@
 
 <form action="" method="POST">
     {% csrf_token %}
-
     <!-- Renderiza o formulário principal -->
     {{ form|crispy }}
 
     <!-- Verifica se existe um Formset no contexto e o renderiza -->
     {% if formset %}
+    <hr>
     <h5>Produtos do Pedido</h5>
     {{ formset.management_form }}
     <div id="formset-area">
+        <!-- Formulários existentes -->
         {% for form in formset %}
-        <div class="formset-row">
-            {{ form|crispy }}
+        <div class="formset-row" id="form-{{ forloop.counter0 }}">
+            {{ form.as_p }}
         </div>
         {% endfor %}
     </div>
 
-    <!-- Botão para adicionar mais produtos (se necessário) -->
-    <button type="button" class="btn btn-success" id="add-formset">Adicionar Produto</button>
+    <!-- Botão para adicionar mais produtos -->
+    <button type="button" class="btn btn-success mt-3" id="add-formset">Adicionar Produto</button>
+
     {% endif %}
 
     <button type="submit" class="btn btn-primary mt-3">{{ botao }}</button>
 </form>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        let formsetArea = document.getElementById('formset-area');
+        let addButton = document.getElementById('add-formset');
+        let totalForms = document.getElementById('id_form-TOTAL_FORMS'); // Campo que controla o total de formulários
+        let formIndex = formsetArea.children.length; // Índice inicial baseado no número de formulários atuais
+
+        addButton.addEventListener('click', function () {
+            // Clone o último formulário do formset
+            let newForm = formsetArea.children[0].cloneNode(true);
+
+            // Atualize os IDs e nomes dos campos do novo formulário
+            let regex = new RegExp(`form-(\\d+)-`, 'g');
+            newForm.innerHTML = newForm.innerHTML.replace(regex, `form-${formIndex}-`);
+
+            // Atualiza os IDs dos elementos do novo formulário
+            let inputs = newForm.querySelectorAll('input, select, textarea');
+            inputs.forEach(function (input) {
+                let name = input.name.replace(regex, `form-${formIndex}-`);
+                let id = `id_${name}`;
+                input.name = name;
+                input.id = id;
+            });
+
+            // Adicione o novo formulário ao final da área do formset
+            formsetArea.appendChild(newForm);
+
+            // Atualize o número total de formulários
+            totalForms.value = formIndex + 1;
+
+            formIndex++;
+        });
+    });
+</script>
+
 
 {% endblock %}

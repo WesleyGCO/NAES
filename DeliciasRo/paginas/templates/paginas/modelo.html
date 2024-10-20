@@ -34,7 +34,7 @@
                 <li class="nav-item dropdown">
                     <a class="btn btn-light dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-user fa-fw"></i>
-                        {{ request.user }}
+                        {{ request.user.first_name }}
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="{% url 'inicio' %}">Alterar senha</a></li>
@@ -135,13 +135,13 @@
                     </div>
                     <div class="sb-sidenav-footer border-light border-1" style="background-color: #371b07;">
                         <div class="small text-light">Está logado como:</div>
-                        {{request.user}}
+                        {{request.user.first_name}}
                     </div>
                 </nav>
             </div>
             {% endblock %}
             
-            <div id="layoutSidenav_content" style="background-color: #ffc0cb;">
+            <div id="layoutSidenav_content" style="background-color: #FFF5EE;">
                 <main>
                     <div class="container-fluid px-4">
                         <br>
