@@ -21,7 +21,7 @@
     <body class="sb-nav-fixed">
 
         {% block menu_superior %}
-        <nav class="sb-topnav navbar navbar-expand navbar-dark border-bottom border-light border-1" style="background-color: #371b07;">
+        <nav class="sb-topnav navbar navbar-expand navbar-dark border-light border-1" style="background-color: #371b07;">
             <!-- Navbar Brand-->
             <a class="navbar-brand ps-3 justify-content-center" href="{% url 'inicio' %}">Pedidos</a>
             <!-- Sidebar Toggle-->
@@ -60,7 +60,7 @@
             
             <div id="layoutSidenav_nav">
                 <nav class="sb-sidenav accordion sb-sidenav-dark" style="background-color: #371b07;" id="sidenavAccordion">
-                    <div class="sb-sidenav-menu border-bottom border-end border-light border-1">
+                    <div class="sb-sidenav-menu border-light border-1">
                         <div class="nav">
                             <div class="sb-sidenav-menu-heading" style="color: #ffc0cb;">Menu</div>
                             <a class="nav-link text-light" href="{% url 'inicio' %}">
@@ -135,7 +135,7 @@
                     </div>
                     <div class="sb-sidenav-footer border-light border-1" style="background-color: #371b07;">
                         <div class="small text-light">Está logado como:</div>
-                        {{request.user.first_name}}
+                        {{request.user.first_name }}
                     </div>
                 </nav>
             </div>

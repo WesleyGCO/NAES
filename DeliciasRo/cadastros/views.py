@@ -7,7 +7,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from django.shortcuts import get_object_or_404
-from .forms import ProdutoPedidoFormSet
+from .forms import ProdutoPedidoFormSet, PedidoForm
 
 #region CategoriaProduto
 
@@ -75,10 +75,10 @@ class CategoriaProdutoList(LoginRequiredMixin, ListView):
 class PedidoCreate(LoginRequiredMixin, CreateView):
     login_url = reverse_lazy('login')
     model = Pedido
-    fields = ['nome', 'cliente', 'data_entrega', 'valor_adiantado', 'valor_total', 'status']
+    form_class = PedidoForm  # Atualizado para usar o PedidoForm
     template_name = 'cadastros/form.html'
     success_url = reverse_lazy('listar-pedido')
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.request.POST:
@@ -88,19 +88,23 @@ class PedidoCreate(LoginRequiredMixin, CreateView):
         context['titulo'] = 'Cadastrar Pedido'
         context['botao'] = 'Cadastrar'
         return context
-    
+
     def form_valid(self, form):
         context = self.get_context_data()
         formset = context['formset']
-        if formset.is_valid():
+
+        if form.is_valid() and formset.is_valid():
             form.instance.criado_por = self.request.user
-            form.instance.data_pedido = datetime.now()
+            form.instance.data_pedido = datetime.now() 
             self.object = form.save()
+
             formset.instance = self.object
             formset.save()
+
             return super().form_valid(form)
         else:
             return self.render_to_response(self.get_context_data(form=form))
+
     
 class PedidoUpdate(LoginRequiredMixin, UpdateView):
     login_url = reverse_lazy('login')
@@ -108,32 +112,39 @@ class PedidoUpdate(LoginRequiredMixin, UpdateView):
     fields = ['nome', 'cliente', 'data_entrega', 'valor_adiantado', 'valor_total', 'status']
     template_name = 'cadastros/form.html'
     success_url = reverse_lazy('listar-pedido')
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        
+
         if self.request.POST:
             context['formset'] = ProdutoPedidoFormSet(self.request.POST, instance=self.object)
         else:
             context['formset'] = ProdutoPedidoFormSet(instance=self.object)
-        
+
         context['titulo'] = 'Editar Pedido'
         context['botao'] = 'Atualizar'
-        
+
         return context
-    
+
     def form_valid(self, form):
         context = self.get_context_data()
         formset = context['formset']
-        
-        if formset.is_valid():
+
+        # Verifica se tanto o form do Pedido quanto o formset dos Produtos são válidos
+        if form.is_valid() and formset.is_valid():
+            # Atualiza o Pedido
             form.instance.criado_por = self.request.user
             self.object = form.save()
+
+            # Atualiza o formset (produtos do pedido)
             formset.instance = self.object
             formset.save()
+
             return super().form_valid(form)
         else:
+            # Se o form ou formset for inválido, renderiza novamente o template com os erros
             return self.render_to_response(self.get_context_data(form=form))
+
 
     
 class PedidoDelete(LoginRequiredMixin, DeleteView):
