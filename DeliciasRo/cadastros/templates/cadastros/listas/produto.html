@@ -10,34 +10,79 @@
 
 <hr>
 <div class="table-responsive">
-    <table class="table table-striped">
-        <tr>
-            <th>Nome</th>
-            <th>Categoria</th>
-            <th>Preço</th>
-            <th>Opções</th>
-        </tr>
+    <table class="table table-striped" id="tabela-listar">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Categoria</th>
+                <th>Preço</th>
+                <th>Opções</th>
+            </tr>
+        </thead>
 
-        {% for object in object_list %}
+        <tbody>
+            {% for object in object_list %}
 
-        <tr>
-            <td>{{ object.nome }}</td>
-            <td>{{ object.categoria.nome }}</td>
-            <td>{{ object.preco }}</td>
-            <td>
-                <a href="{% url 'atualizar-produto' object.id %}" class="btn btn-warning btn-sm"><i class="bi bi-pencil"></i></a>
-                <a href="{% url 'excluir-produto' object.id %}" class="btn btn-danger btn-sm"><i class="bi bi-trash"></i>
-            </td>
-        </tr>
+            <tr>
+                <td>{{ object.nome }}</td>
+                <td>{{ object.categoria.nome }}</td>
+                <td>{{ object.preco }}</td>
+                <td>
+                    <a href="{% url 'atualizar-produto' object.id %}" class="btn btn-warning btn-sm"><i
+                            class="bi bi-pencil"></i></a>
+                    <a href="{% url 'excluir-produto' object.id %}" class="btn btn-danger btn-sm"><i
+                            class="bi bi-trash"></i>
+                </td>
+            </tr>
 
-        {% empty %}
-        <tr>
-            <td colspan="3">Nenhum registro encontrado</td>
-        </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3">Nenhum registro encontrado</td>
+            </tr>
 
-        {% endfor %}
+            {% endfor %}
+        </tbody>
     </table>
 </div>
 
+
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+    $(document).ready(function () {
+        $('#tabela-listar').DataTable({
+            responsive: true,
+            // "bSort": false,
+            "aaSorting": [],
+            "pageLength": 5,
+            "language": {
+                "decimal": "",
+                "emptyTable": "Sem dados disponíveis",
+                "info": "Mostrando de _START_ até _END_ de _TOTAL_ registos",
+                "infoEmpty": "Mostrando de 0 até 0 de 0 registros",
+                "infoFiltered": "(filtrado de _MAX_ registros no total)",
+                "infoPostFix": "",
+                "thousands": ",",
+                "lengthMenu": "Mostrar _MENU_ registros",
+                "loadingRecords": "A carregar dados...",
+                "processing": "A processar...",
+                "search": "Procurar:",
+                "zeroRecords": "Não foram encontrados resultados",
+                "paginate": {
+                    "first": "Primeiro",
+                    "last": "Último",
+                    "next": "Seguinte",
+                    "previous": "Anterior"
+                },
+                "aria": {
+                    "sortAscending": ": ordem crescente",
+                    "sortDescending": ": ordem decrescente"
+                }
+            }
+        });
+    });
+</script>
 
 {% endblock %}

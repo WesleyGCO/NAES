@@ -9,14 +9,20 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404
 from .forms import ProdutoPedidoFormSet, PedidoForm
 
+from django_filters.views import FilterView
+from .filters import CategoriaProdutoFilter, ProdutoFilter, PedidoFilter, ClienteFilter
+
+from django.contrib.messages.views import SuccessMessageMixin
+
 #region CategoriaProduto
 
-class CategoriaProdutoCreate(LoginRequiredMixin, CreateView):
+class CategoriaProdutoCreate(LoginRequiredMixin, CreateView, SuccessMessageMixin):
     login_url = reverse_lazy('login')
     model = CategoriaProduto
     fields = ['nome']
     template_name = 'cadastros/form.html'
     success_url = reverse_lazy('listar-categoria')
+    success_message = 'Categoria %(nome)s cadastrada com sucesso!'
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -39,11 +45,12 @@ class CategoriaProdutoUpdate(LoginRequiredMixin, UpdateView):
         
         return context
     
-class CategoriaProdutoDelete(LoginRequiredMixin, DeleteView):
+class CategoriaProdutoDelete(LoginRequiredMixin, DeleteView, SuccessMessageMixin):
     login_url = reverse_lazy('login')
     model = CategoriaProduto
     template_name = 'cadastros/form-excluir.html'
     success_url = reverse_lazy('listar-categoria')
+    success_message = 'Categoria excluída com sucesso!'
     
     # def get_object(self, queryset = None):
     #     #self.object = CategoriaProduto.objects.get(id=self.kwargs['pk'], criado_por=self.request.user)
@@ -58,11 +65,12 @@ class CategoriaProdutoDelete(LoginRequiredMixin, DeleteView):
         return context
     
     
-class CategoriaProdutoList(LoginRequiredMixin, ListView):
+class CategoriaProdutoList(LoginRequiredMixin, FilterView):
     login_url = reverse_lazy('login')
     model = CategoriaProduto
     template_name = 'cadastros/listas/categoria.html'
     context_object_name = 'categorias'
+    filterset_class = CategoriaProdutoFilter
     
     # def get_queryset(self):
     #     self.object_list = CategoriaProduto.objects.filter()
@@ -160,11 +168,12 @@ class PedidoDelete(LoginRequiredMixin, DeleteView):
         
         return context
     
-class PedidoList(LoginRequiredMixin, ListView):
+class PedidoList(LoginRequiredMixin, FilterView):
     login_url = reverse_lazy('login')
     model = Pedido
     template_name = 'cadastros/listas/pedido.html'
     context_object_name = 'pedidos'
+    filterset_class = PedidoFilter
 
 #endregion Pedido
 
@@ -224,11 +233,12 @@ class ProdutoDelete(LoginRequiredMixin, DeleteView):
         
         return context
 
-class ProdutoList(LoginRequiredMixin, ListView):
+class ProdutoList(LoginRequiredMixin, FilterView):
     login_url = reverse_lazy('login')
     model = Produto
     template_name = 'cadastros/listas/produto.html'
     context_object_name = 'produtos'
+    filterset_class = ProdutoFilter
 
 #endregion Produto
 
@@ -342,11 +352,12 @@ class ClienteDelete(LoginRequiredMixin, DeleteView):
         
         return context
     
-class ClienteList(LoginRequiredMixin, ListView):
+class ClienteList(LoginRequiredMixin, FilterView):
     login_url = reverse_lazy('login')
     model = Cliente
     template_name = 'cadastros/listas/cliente.html'
     context_object_name = 'clientes'
+    filterset_class = ClienteFilter
 
 
 #endregion Cliente
