@@ -15,6 +15,8 @@
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         
         <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+
+        <link href="https://cdn.datatables.net/v/bs4/dt-2.1.8/datatables.min.css" rel="stylesheet">
         
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     </head>
@@ -34,7 +36,7 @@
                 <li class="nav-item dropdown">
                     <a class="btn btn-light dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-user fa-fw"></i>
-                        {{ request.user.first_name }}
+                        {{ request.user.username }}
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="{% url 'inicio' %}">Alterar senha</a></li>
@@ -135,7 +137,7 @@
                     </div>
                     <div class="sb-sidenav-footer border-light border-1" style="background-color: #371b07;">
                         <div class="small text-light">Está logado como:</div>
-                        {{request.user.first_name }}
+                        {{request.user.username }}
                     </div>
                 </nav>
             </div>
@@ -291,6 +293,25 @@
 
                         {% endblock %}
                     </div>
+
+                    {% if messages %}
+                    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                    
+                        {% for m in messages %}
+                        <div class="toast border-{{m.tags}}" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="10000">
+                            <div class="toast-header border-{{m.tags}}">
+                                <strong class="me-auto">Aviso</strong>
+                                <small class="text-body-secondary">Agora</small>
+                                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                            </div>
+                            <div class="toast-body">
+                                {{ m }}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    
+                    </div>
+                    {% endif %}
                 </main>
 
                 {% block rodape %}
@@ -320,7 +341,17 @@
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
         <script src="{% static 'js/datatables-simple-demo.js' %}"></script>
 
-        {% block scripts %}        
+        <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
+
+        <script src="https://cdn.datatables.net/v/bs4/dt-2.1.8/datatables.min.js"></script>
+
+        <script>
+            $(document).ready(function () {
+                $('.toast').toast('show');
+            });
+        </script>
+
+        {% block scripts %}
 
         {% endblock %}
 

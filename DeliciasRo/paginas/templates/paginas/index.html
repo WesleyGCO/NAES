@@ -17,7 +17,7 @@
 {% else %}
 
     <p>
-        Olá, {{ request.user.first_name }}!
+        Olá, {{ request.user.username }}!
     </p>
 
     <h4>Minhas estatísticas</h4>
@@ -27,7 +27,7 @@
 
     <hr>
 
-    <h3>Lista de pedidos pendentes entre {{data_inicial}} e {{data_final}}</h3>
+    <h3>Pedidos pendentes de {{data_inicial}} a {{data_final}}</h3>
 
     <div class="table-responsive">
         <table class="table table-striped">
@@ -45,7 +45,7 @@
                 <td>{{ object.nome }}</td>
                 <td>{{ object.cliente }}</td>
                 <td>{{ object.valor_total }}</td>
-                <td>{{ object.data_entrega }}</td>
+                <td data-sort="{{ object.data_entrega|date:'Ymd' }}">{{ object.data_entrega|date:"d/m/Y" }}</td>
                 <td>
                     <a href="{% url 'atualizar-pedido' object.id %}" class="btn btn-warning btn-sm"><i
                             class="bi bi-pencil"></i></a>
